@@ -23,7 +23,7 @@ $worker->onMessage = function (TcpConnection $connection, $data) use ($namespace
     var_dump($data);
 
     if(!empty($data['exit'])){
-        return $connection->destroy();
+        $connection->destroy();
     }
 
     $id = $data['id'] ?? null;
