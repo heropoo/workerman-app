@@ -1,0 +1,7 @@
+{
+    "require": {
+        "ext-posix": "*",
+        "ext-pcntl": "*",
+        "workerman/workerman": "^4.0"
+    }
+}
