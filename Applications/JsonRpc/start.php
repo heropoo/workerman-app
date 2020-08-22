@@ -3,6 +3,7 @@
 require_once __DIR__ . '/../../vendor/autoload.php';
 
 use Workerman\Worker;
+use Workerman\Connection\TcpConnection;
 
 // 自动加载类
 //require_once __DIR__ . '/Clients/StatisticClient.php';
@@ -15,55 +16,67 @@ $worker->count = 16;
 // worker名称，php start.php status 时展示使用
 $worker->name = 'JsonRpc';
 
+$namespace = '\\Applications\\JsonRpc\\Services';
 
-$worker->onMessage = function ($connection, $data) {
+$worker->onMessage = function (TcpConnection $connection, $data) use ($namespace) {
     $statistic_address = 'udp://127.0.0.1:55656';
     var_dump($data);
+
+    if(!empty($data['exit'])){
+        return $connection->destroy();
+    }
+
+    $id = $data['id'] ?? null;
+
     // 判断数据是否正确
-    if (empty($data['class']) || empty($data['method']) || !isset($data['param_array'])) {
+    if (empty($data['method'])) {
         // 发送数据给客户端，请求包错误
-        return $connection->send(array('code' => 400, 'msg' => 'bad request', 'data' => null));
+//        return $connection->send(array('code' => 400, 'msg' => 'bad request', 'data' => null));
+        return $connection->send(jsonRpcError(-32600, 'Invalid Request', $id));
     }
     // 获得要调用的类、方法、及参数
-    $class = $data['class'];
     $method = $data['method'];
-    $param_array = $data['param_array'];
+    $params = $data['params'] ?? [];
 
-//    StatisticClient::tick($class, $method);
-    $success = false;
-    // 判断类对应文件是否载入
-    if (!class_exists($class)) {
-        $include_file = __DIR__ . "/Services/$class.php";
-        if (is_file($include_file)) {
-            require_once $include_file;
-        }
-        if (!class_exists($class) || !method_exists($class, $method)) {
-            $code = 404;
-            $msg = "class $class or method $method not found";
-//            StatisticClient::report($class, $method, $success, $code, $msg, $statistic_address);
-            // 发送数据给客户端 类不存在
-            return $connection->send(array('code' => $code, 'msg' => $msg, 'data' => null));
-        }
+    $arr = explode('::', $method);
+    $class_name = $namespace . '\\' . $arr[0];
+    $action_name = $arr[1] ?? 'index';
+    if (!class_exists($class_name) || !method_exists($class_name, $action_name)) {
+        return jsonRpcError(-32601, 'Method not found', $id);
     }
 
-    // 调用类的方法
     try {
-        $ret = call_user_func_array(array($class, $method), $param_array);
-//        StatisticClient::report($class, $method, 1, 0, '', $statistic_address);
-        // 发送数据给客户端，调用成功，data下标对应的元素即为调用结果
-        return $connection->send(array('code' => 0, 'msg' => 'ok', 'data' => $ret));
-    } // 有异常
-    catch (Exception $e) {
-        // 发送数据给客户端，发生异常，调用失败
-        $code = $e->getCode() ? $e->getCode() : 500;
-//        StatisticClient::report($class, $method, $success, $code, $e, $statistic_address);
-        return $connection->send(array('code' => $code, 'msg' => $e->getMessage(), 'data' => $e));
+        $result = call_user_func_array(array($class_name, $action_name), $params);
+        return $connection->send(jsonRpcResult($result, $id));
+    } catch (Exception $e) {
+        return $connection->send(jsonRpcError(-32603, 'Internal error', $id));
     }
 
 };
 
-
 // 如果不是在根目录启动，则运行runAll方法
 if (!defined('GLOBAL_START')) {
     Worker::runAll();
+}
+
+function jsonRpcError($code, $message, $id = null)
+{
+    return [
+        'jsonrpc' => '2.0',
+        'error' => [
+            'code' => $code,
+            'message' => $message,
+        ],
+        'id' => $id
+    ];
+}
+
+
+function jsonRpcResult($result, $id = null)
+{
+    return [
+        'jsonrpc' => '2.0',
+        'result' => $result,
+        'id' => $id
+    ];
 }
