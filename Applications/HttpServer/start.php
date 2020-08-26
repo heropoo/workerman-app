@@ -26,7 +26,7 @@ $worker->onMessage = function (TcpConnection $connection, Request $request) {
 
     var_dump($request->header());
     // 已经处理请求数
-    static $request_count = 0;
+    //static $request_count = 0;
 
     // 向浏览器发送hello world
     $connection->send('hello world');

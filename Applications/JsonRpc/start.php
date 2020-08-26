@@ -22,7 +22,7 @@ $worker->onMessage = function (TcpConnection $connection, $data) use ($namespace
     $statistic_address = 'udp://127.0.0.1:55656';
     var_dump($data);
 
-    if(!empty($data['exit'])){
+    if (!empty($data['exit'])) {
         $connection->destroy();
     }
 
@@ -35,12 +35,13 @@ $worker->onMessage = function (TcpConnection $connection, $data) use ($namespace
         return $connection->send(jsonRpcError(-32600, 'Invalid Request', $id));
     }
     // 获得要调用的类、方法、及参数
-    $method = $data['method'];
+    $method = $data['method']; // {"method": "test-user/hello", "id": 123}
     $params = $data['params'] ?? [];
 
     $arr = explode('::', $method);
     $class_name = $namespace . '\\' . $arr[0];
     $action_name = $arr[1] ?? 'index';
+    var_dump($class_name, $action_name);
     if (!class_exists($class_name) || !method_exists($class_name, $action_name)) {
         return jsonRpcError(-32601, 'Method not found', $id);
     }
