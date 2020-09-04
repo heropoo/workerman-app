@@ -2,6 +2,7 @@
     "require": {
         "php": ">=7.0",
         "ext-json": "*",
+        "ext-pdo": "*",
         "ext-posix": "*",
         "ext-pcntl": "*",
         "workerman/workerman": "^4.0",
