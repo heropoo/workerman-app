@@ -1,7 +1,9 @@
 <?php
+/**
+ * Start A Http Server
+ */
 
-
-require_once __DIR__ . '/../../vendor/autoload.php';
+require_once ROOT_PATH.'/src/bootstrap.php';
 
 use Workerman\Worker;
 use Workerman\Connection\TcpConnection;
@@ -12,7 +14,7 @@ use Workerman\Protocols\Http\Request;
 //require_once __DIR__ . '/../../JsonNL.php';
 
 // 每个进程最多执行1000个请求
-define('MAX_REQUEST', 1000);
+//define('MAX_REQUEST', 1000);
 
 // 开启的端口
 $worker = new Worker('http://0.0.0.0:2345');
