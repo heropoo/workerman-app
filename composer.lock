@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6736e4c3449353b357c4f2c4e2649974",
+    "content-hash": "697f0641ae3ee2a14a1a2d3cfb0d5f7c",
     "packages": [
         {
             "name": "heropoo/cache",
@@ -195,6 +195,100 @@
             "time": "2020-01-07T10:19:27+00:00"
         },
         {
+            "name": "heropoo/request",
+            "version": "dev-psr7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/heropoo/request.git",
+                "reference": "8dcc70f88afa0ce2e79f4493a795b74d8564d3af"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/heropoo/request/zipball/8dcc70f88afa0ce2e79f4493a795b74d8564d3af",
+                "reference": "8dcc70f88afa0ce2e79f4493a795b74d8564d3af",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "psr/http-message": "^1.0"
+            },
+            "suggest": {
+                "heropoo/routing": "To match request quickly"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Moon\\Request\\": "./"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "heropoo",
+                    "email": "aiyouyou1000@163.com"
+                }
+            ],
+            "time": "2020-09-09T15:48:01+00:00"
+        },
+        {
+            "name": "heropoo/routing",
+            "version": "v0.8.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/heropoo/routing.git",
+                "reference": "bfde8262723280638185f68d730b423d89a6aa25"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/heropoo/routing/zipball/bfde8262723280638185f68d730b423d89a6aa25",
+                "reference": "bfde8262723280638185f68d730b423d89a6aa25",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=5.4"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8.36|^7.5.18"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Moon\\Routing\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Heropoo",
+                    "email": "aiyouyou1000@163.com"
+                }
+            ],
+            "description": "A simple and fast route. Use tree structure storage, fast matching!",
+            "keywords": [
+                "route",
+                "router",
+                "routing"
+            ],
+            "time": "2020-02-11T14:00:04+00:00"
+        },
+        {
             "name": "monolog/monolog",
             "version": "2.1.1",
             "source": {
@@ -361,6 +455,62 @@
                 }
             ],
             "time": "2020-08-29T22:15:08+00:00"
+        },
+        {
+            "name": "psr/http-message",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/http-message.git",
+                "reference": "f6561bf28d520154e4b0ec72be95418abe6d9363"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/http-message/zipball/f6561bf28d520154e4b0ec72be95418abe6d9363",
+                "reference": "f6561bf28d520154e4b0ec72be95418abe6d9363",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Http\\Message\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for HTTP messages",
+            "homepage": "https://github.com/php-fig/http-message",
+            "keywords": [
+                "http",
+                "http-message",
+                "psr",
+                "psr-7",
+                "request",
+                "response"
+            ],
+            "time": "2016-08-06T14:39:51+00:00"
         },
         {
             "name": "psr/log",
@@ -631,7 +781,9 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "heropoo/request": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

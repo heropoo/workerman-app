@@ -1,4 +1,5 @@
 <?php
+
 use Moon\Container\Container;
 use Moon\Config\Config;
 use Dotenv\Exception\ExceptionInterface;
@@ -35,14 +36,15 @@ class Application
         $this->init();
     }
 
-    protected function init(){
+    protected function init()
+    {
         try {
             (new \Dotenv\Dotenv($this->rootPath))->load();
         } catch (ExceptionInterface $e) {
             trigger_error($e->getMessage(), E_USER_ERROR);
         }
 
-        $config = new Config($this->rootPath.'/config');
+        $config = new Config($this->rootPath . '/config');
         $this->container->add('config', $config);
 
         $this->config = $config->get('app', true);

@@ -8,6 +8,7 @@ require_once ROOT_PATH.'/src/bootstrap.php';
 use Workerman\Worker;
 use Workerman\Connection\TcpConnection;
 use Workerman\Protocols\Http\Request;
+use Applications\HttpServer\HttpHandler;
 
 // 自动加载类
 //require_once __DIR__ . '/Clients/StatisticClient.php';
@@ -23,10 +24,15 @@ $worker->count = 16;
 // worker名称，php start.php status 时展示使用
 $worker->name = 'HttpServer';
 
-$worker->onMessage = function (TcpConnection $connection, Request $request) {
-//    var_dump($request);
+$handler = new HttpHandler();
 
-    var_dump($request->header());
+$worker->onMessage = function (TcpConnection $connection, Request $request) use($handler) {
+    $response = $handler->handle($request);
+    var_dump($response);
+//    var_dump($request->method());
+//    var_dump($request->path());
+
+//    var_dump($request->header());
     // 已经处理请求数
     //static $request_count = 0;
 
