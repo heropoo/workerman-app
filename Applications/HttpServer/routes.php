@@ -1,13 +1,13 @@
 <?php
 use Moon\Routing\Router;
-use Moon\Request\Request;
+use Workerman\Protocols\Http\Request;
 
 /** @var Router $router */
 
 $router->get('/', 'IndexController::index');
-$router->controller('/test', 'TestController');
-$router->resource('/user/', 'UserController');
-
+//$router->controller('/test', 'TestController');
+//$router->resource('/user/', 'UserController');
+//
 $router->get('/hello/{username}', function (Request $request, $username) {
-    return $request->getMethod().'. Hello '. $username;
+    return $request->method().'. Hello '. $username;
 });

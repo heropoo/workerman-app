@@ -6,6 +6,15 @@ use Dotenv\Exception\ExceptionInterface;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
+/**
+ * Class Application
+ * @method string getEnvironment()
+ * @method string getRootPath()
+ * @method string getCharset()
+ * @method string getTimezone()
+ * @method array getConfig()
+ * @method bool getDebug()
+ */
 class Application
 {
     /** @var Container $container */

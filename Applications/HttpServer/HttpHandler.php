@@ -2,49 +2,55 @@
 
 
 namespace Applications\HttpServer;
+
 use Moon\Routing\Route;
+use Moon\Routing\UrlMatchException;
 use Workerman\Protocols\Http\Request;
 use Moon\Routing\Router;
+use Workerman\Protocols\Http\Response;
 
 
 class HttpHandler
 {
+    protected $router;
+    protected $container;
+
     public function __construct()
     {
-//        $route_config = config('route');
-//        $router = new Router([
-//            'namespace' => isset($route_config['namespace']) ? $route_config['namespace'] : 'App\Controllers',
-//            'prefix' => isset($route_config['prefix']) ? $route_config['prefix'] : null,
-//            'middleware' => isset($route_config['middleware']) ? $route_config['middleware'] : [],
-//        ]);
+        $this->container = \App::$container;
+        $this->router = $router = new Router([
+            'namespace' => 'Applications\\HttpServer\\Controllers',
+        ]);
+
+        require_once __DIR__ . '/routes.php';
     }
 
-    public function handle(Request $request){
-        $container = \App::$container;
+    public function handle(Request $request)
+    {
+        $router = $this->router;
+        $container = $this->container;
 
-        $router = new Router();
-        require_once __DIR__.'/routes.php';
-
-        $matchResult = $router->dispatch($request->path(), $request->method());
-
-        /** @var Route $route */
-        $route = $matchResult['route'];
-        $params = $matchResult['params'];
-
-        $params = array_map(function ($param) {
-            return urldecode($param);
-        }, $params);
-
-        $middlewareList = $route->getMiddleware();
-
-        $result = $this->filterMiddleware($request, $middlewareList);
-
-        if (!is_null($result)) {
-            return $this->makeResponse($result);
-        }
-
+        $container->add(Request::class, $request);
         try {
-             // resolve controller
+            $matchResult = $router->dispatch($request->path(), $request->method());
+
+            /** @var Route $route */
+            $route = $matchResult['route'];
+            $params = $matchResult['params'];
+
+            $params = array_map(function ($param) {
+                return urldecode($param);
+            }, $params);
+
+            $middlewareList = $route->getMiddleware();
+
+            $result = $this->filterMiddleware($request, $middlewareList);
+
+            if (!is_null($result)) {
+                return $this->makeResponse($result);
+            }
+
+            // resolve controller
             $action = $route->getAction();
             if ($action instanceof \Closure) {
                 $data = $container->callFunction($action, $params);
@@ -59,47 +65,52 @@ class HttpHandler
                 $data = $container->callMethod($controllerName, $methodName, $params);
                 return $this->makeResponse($data);
             }
-        } catch (HttpException $e) {
+        } catch (UrlMatchException $e) {
+            return $this->makeResponse($e->getMessage(), $e->getCode());
+        } catch (HttpException $e) { //todo
             return $this->makeResponse($e->getMessage(), $e->getCode());
         }
     }
 
     /**
      * @param Request $request
-     * @param array $middlewareList
+     * @param array $middlewares
      * @return mixed
      * @throws \Exception
      */
-    protected function filterMiddleware($request, $middlewareList)
+    protected function filterMiddleware(Request $request, array $middlewares)
     {
-        if (empty($middlewareList)) {
+        if (empty($middlewares)) {
             return null;
         }
-        $middleware = array_shift($middlewareList);
+        $middleware = array_shift($middlewares);
         if (!class_exists($middleware)) {
             throw new \Exception('Class ' . $middleware . ' is not exists!');
         }
         $middlewareObj = new $middleware();
-        return $middlewareObj->handle($request, function ($request) use ($middlewareList) {
-            return $this->filterMiddleware($request, $middlewareList);
+        return $middlewareObj->handle($request, function ($request) use ($middlewares) {
+            return $this->filterMiddleware($request, $middlewares);
         });
     }
 
     /**
      * @param mixed $data
      * @param int $status
-     * @return JsonResponse|Response
+     * @return string
      */
     protected function makeResponse($data, $status = 200)
     {
         if ($data instanceof Response) {
             return $data;
-        } else if ($data instanceof View) {
-            return new Response(strval($data), $status);
-        } else if (is_array($data) || is_object($data)) {
-            return new JsonResponse($data, $status);
+        }
+        //todo View
+//        else if ($data instanceof View) {
+//            return new Response(strval($data), $status);
+//        }// else
+        else if (is_array($data) || is_object($data)) {
+            return new Response($status, ['Content-Type', 'application/json'], json_encode($data));
         } else {
-            return new Response(strval($data), $status);
+            return new Response($status, ['Content-Type' => 'text/html;charset=' . \App::$instance->getCharset()], $data);
         }
     }
 }

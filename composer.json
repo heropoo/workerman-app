@@ -12,8 +12,7 @@
         "heropoo/db": "^0.5.0",
         "monolog/monolog": "^2.1",
         "vlucas/phpdotenv": "^2.5",
-        "heropoo/routing": "^0.8.4",
-        "heropoo/request": "dev-psr7"
+        "heropoo/routing": "^0.8.4"
     },
     "autoload": {
         "psr-4": {
