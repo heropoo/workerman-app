@@ -1,5 +1,5 @@
 # workerman-app
-workerman 框架使用demo
+workerman加入常用组件，整合之后开箱即用
 
 ## 使用组件
 ```json
