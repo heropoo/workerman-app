@@ -1,6 +1,7 @@
 <?php
 
-require_once ROOT_PATH.'/src/bootstrap.php';
+$root_path = dirname(dirname(__DIR__));
+require_once $root_path . '/src/bootstrap.php';
 
 use Workerman\Worker;
 use Workerman\Connection\TcpConnection;

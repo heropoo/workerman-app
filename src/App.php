@@ -1,6 +1,7 @@
 <?php
 
 use Moon\Container\Container;
+use Moon\Application;
 
 class App
 {

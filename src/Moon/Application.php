@@ -1,5 +1,7 @@
 <?php
 
+namespace Moon;
+
 use Moon\Container\Container;
 use Moon\Config\Config;
 use Dotenv\Exception\ExceptionInterface;
@@ -25,7 +27,7 @@ class Application
 
     protected $environment = 'production';
     protected $debug = false;
-    protected $charset = 'UTF-8';
+    protected $charset = 'utf-8';
     protected $timezone = 'UTC';
 
     public function __construct($rootPath, array $options = [], Container $container = null)

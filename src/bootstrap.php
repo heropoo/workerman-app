@@ -1,6 +1,9 @@
 <?php
-define('ROOT_PATH', dirname(__DIR__));
-require_once ROOT_PATH . '/vendor/autoload.php';
 
-$app = new Application(ROOT_PATH);
+$root_path = dirname(__DIR__);
+require_once $root_path . '/vendor/autoload.php';
+
+use Moon\Application;
+
+$app = new Application($root_path);
 return $app;

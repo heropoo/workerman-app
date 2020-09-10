@@ -1,4 +1,5 @@
 <?php
+
 use Moon\Routing\Router;
 use Workerman\Protocols\Http\Request;
 
@@ -9,5 +10,14 @@ $router->get('/', 'IndexController::index');
 //$router->resource('/user/', 'UserController');
 //
 $router->get('/hello/{username}', function (Request $request, $username) {
-    return $request->method().'. Hello '. $username;
+    return $request->method() . '. Hello ' . $username;
+});
+
+$router->any('/test', function (Request $request) {
+    return [
+        'method' => $request->method(),
+        'path' => $request->path(),
+        'uri' => $request->uri(),
+        'session_id' => $request->sessionId()
+    ];
 });

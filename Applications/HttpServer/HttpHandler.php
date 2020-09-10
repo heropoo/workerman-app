@@ -3,6 +3,7 @@
 
 namespace Applications\HttpServer;
 
+use Moon\HttpException;
 use Moon\Routing\Route;
 use Moon\Routing\UrlMatchException;
 use Workerman\Protocols\Http\Request;
@@ -108,7 +109,7 @@ class HttpHandler
 //            return new Response(strval($data), $status);
 //        }// else
         else if (is_array($data) || is_object($data)) {
-            return new Response($status, ['Content-Type', 'application/json'], json_encode($data));
+            return new Response($status, ['Content-Type' => 'application/json'], json_encode($data));
         } else {
             return new Response($status, ['Content-Type' => 'text/html;charset=' . \App::$instance->getCharset()], $data);
         }

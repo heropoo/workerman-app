@@ -2,6 +2,7 @@
 
 return [
     'timezone' => 'Asia/Shanghai',
+    'charset' => 'utf-8',
     'components' => [
         'redis' => [
             'class' => 'Moon\Cache\Redis',
