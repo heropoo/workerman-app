@@ -6,10 +6,11 @@
 $root_path = dirname(dirname(__DIR__));
 require_once $root_path . '/src/bootstrap.php';
 
+use Moon\Routing\Router;
 use Workerman\Worker;
 use Workerman\Connection\TcpConnection;
 use Workerman\Protocols\Http\Request;
-use Applications\HttpServer\HttpHandler;
+use Moon\HttpHandler;
 use Workerman\Protocols\Http\Response;
 
 // 自动加载类
@@ -31,7 +32,10 @@ $worker->name = 'HttpServer';
 
 Worker::$pidFile = $root_path . '/runtime/workerman-' . $worker->name . '.pid';
 
-$handler = new HttpHandler();
+$router = new Router([
+    'namespace' => 'Applications\\HttpServer\\Controllers',
+]);
+$handler = new HttpHandler(App::$container, $router, __DIR__.'/routes.php');
 
 $worker->onMessage = function (TcpConnection $connection, Request $request) use ($handler, $root_path) {
     echo '[' . date('Y-m-d H:i:s') . '] ' . $request->connection->getRemoteAddress() . ' '

@@ -1,8 +1,9 @@
 <?php
 
 
-namespace Applications\HttpServer;
+namespace Moon;
 
+use Moon\Container\Container;
 use Moon\HttpException;
 use Moon\Routing\Route;
 use Moon\Routing\UrlMatchException;
@@ -16,14 +17,12 @@ class HttpHandler
     protected $router;
     protected $container;
 
-    public function __construct()
+    public function __construct(Container $container, Router $router, $routes_file)
     {
-        $this->container = \App::$container;
-        $this->router = $router = new Router([
-            'namespace' => 'Applications\\HttpServer\\Controllers',
-        ]);
+        $this->container = $container;
+        $this->router = $router;
 
-        require_once __DIR__ . '/routes.php';
+        require_once $routes_file;
     }
 
     public function handle(Request $request)
@@ -38,6 +37,8 @@ class HttpHandler
             /** @var Route $route */
             $route = $matchResult['route'];
             $params = $matchResult['params'];
+
+            $request->route = $route;
 
             $params = array_map(function ($param) {
                 return urldecode($param);
