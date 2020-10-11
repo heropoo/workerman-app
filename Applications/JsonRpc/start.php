@@ -11,7 +11,7 @@ use Workerman\Connection\TcpConnection;
 //require_once __DIR__ . '/../../JsonNL.php';
 
 // 开启的端口
-$worker = new Worker('JsonNL://0.0.0.0:2015');
+$worker = new Worker(config('server.JsonRpc.socket_name'));
 // 启动多少服务进程
 $worker->count = 16;
 // worker名称，php start.php status 时展示使用
