@@ -10,7 +10,9 @@
         "heropoo/config": "^0.2.1",
         "heropoo/cache": "^0.3.0",
         "heropoo/db": "^0.5.0",
-        "monolog/monolog": "^2.1"
+        "heropoo/routing": "^0.8.4",
+        "monolog/monolog": "^2.1",
+        "vlucas/phpdotenv": "^2.5"
     },
     "autoload": {
         "psr-4": {
