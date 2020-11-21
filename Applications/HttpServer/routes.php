@@ -6,14 +6,14 @@ use Workerman\Protocols\Http\Request;
 /** @var Router $router */
 
 $router->get('/', 'IndexController::index');
-//$router->controller('/test', 'TestController');
+$router->controller('/test', 'TestController');
 //$router->resource('/user/', 'UserController');
 //
 $router->get('/hello/{username}', function (Request $request, $username) {
     return $request->method() . '. Hello ' . $username;
 });
 
-$router->any('/test', function (Request $request) {
+$router->any('/test-request', function (Request $request) {
     return [
         'method' => $request->method(),
         'path' => $request->path(),

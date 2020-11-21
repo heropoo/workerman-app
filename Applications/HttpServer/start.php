@@ -21,7 +21,7 @@ use Workerman\Protocols\Http\Response;
 //define('MAX_REQUEST', 1000);
 
 // 开启的端口
-$worker = new Worker('http://0.0.0.0:2345');
+$worker = new Worker(config('server.HttpServer.socket_name'));
 // 启动多少服务进程
 $worker->count = 16;
 // worker名称，php start.php status 时展示使用
@@ -35,7 +35,7 @@ Worker::$pidFile = $root_path . '/runtime/workerman-' . $worker->name . '.pid';
 $router = new Router([
     'namespace' => 'Applications\\HttpServer\\Controllers',
 ]);
-$handler = new HttpHandler(App::$container, $router, __DIR__.'/routes.php');
+$handler = new HttpHandler(App::$container, $router, __DIR__ . '/routes.php');
 
 $worker->onMessage = function (TcpConnection $connection, Request $request) use ($handler, $root_path) {
     echo '[' . date('Y-m-d H:i:s') . '] ' . $request->connection->getRemoteAddress() . ' '
