@@ -6,12 +6,18 @@ namespace Applications\JsonRpc\Services;
 
 class User
 {
-    // {"method": "User::getInfo", "params": [100]}
-    public static function getInfo($id)
+    // {"method": "User::getInfo", "params": [1]}
+    public static function getInfoAction($id)
     {
+        $users = [
+            1 => ['id' => 1, 'name' => '小明', 'sex' => '男'],
+            2 => ['id' => 2, 'name' => '小萌', 'sex' => '女'],
+        ];
+
+        $user = $users[$id];
+
         return [
-            'name' => 'xiao' . mt_rand(1, 9),
-            'id' => $id
+            'user' => $user
         ];
     }
 }
