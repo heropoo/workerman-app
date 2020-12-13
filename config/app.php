@@ -23,9 +23,9 @@ return [
                 //'tablePrefix' => 'tt_',
                 'emulatePrepares' => false,
                 'options' => [
-                    \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                 ]
             ]
-        ]
+        ],
     ]
 ];
